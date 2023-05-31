@@ -1,21 +1,36 @@
 package ToDoApp.ToDoApplication.controllers;
 
 import ToDoApp.ToDoApplication.models.ToDoItem;
+import ToDoApp.ToDoApplication.models.User;
 import ToDoApp.ToDoApplication.services.ToDoItemService;
+import ToDoApp.ToDoApplication.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ToDoFormController {
+    @Autowired
+    UserService userService;
 
     @Autowired
     private ToDoItemService toDoItemService;
+
+    @GetMapping("/user/{userid}")
+    public ModelAndView index(@PathVariable("userid") Long userid) {
+        ModelAndView modelAndView = new ModelAndView("index");
+        modelAndView.addObject("toDoItems", toDoItemService.getAll());
+        return modelAndView;
+    }
 
     @GetMapping("/create-todo")
     public String showCreateForm(ToDoItem toDoItem) {
@@ -28,7 +43,13 @@ public class ToDoFormController {
         item.setDescription(toDoItem.getDescription());
         item.setIsComplete(toDoItem.getIsComplete());
 
-        toDoItemService.save(toDoItem);
+        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
+        String username = null;
+        if (userDetails instanceof UserDetails) {
+            username =  ((UserDetails) userDetails).getUsername();
+            System.out.println("ABABAB");
+        }
+        (userService.findByUsername(username)).toDoItemSet.add(toDoItemService.save(item));
         return "redirect:/";
     }
 
@@ -36,7 +57,7 @@ public class ToDoFormController {
     public String deleteToDoItem(@PathVariable("id") Long id, Model model) {
         ToDoItem toDoItem = toDoItemService
                 .getById(id)
-                .orElseThrow(() -> new IllegalArgumentException("ToDoItem id: " + id + " not found"));
+                .orElseThrow(() -> new IllegalArgumentException("TodoItem id: " + id + " not found"));
         toDoItemService.delete(toDoItem);
         return "redirect:/";
     }
