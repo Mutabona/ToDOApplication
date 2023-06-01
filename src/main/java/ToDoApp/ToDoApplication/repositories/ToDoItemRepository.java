@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ToDoItemRepository extends JpaRepository<ToDoItem, Long> {
 
-    ToDoItem findByOwnerId (Long ownerId);
+    Iterable<ToDoItem> findByOwnerId (Long ownerId);
 }

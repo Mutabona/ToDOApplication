@@ -30,7 +30,7 @@ public class ToDoFormController {
     @GetMapping("/")
     public ModelAndView index(@AuthenticationPrincipal UserDetails user) {
         ModelAndView modelAndView = new ModelAndView("index");
-        modelAndView.addObject("toDoItems", toDoItemService.getAll());
+        modelAndView.addObject("toDoItems", toDoItemService.getAllByOwnerId(userService.findByUsername(user.getUsername()).getId()));
         return modelAndView;
     }
 

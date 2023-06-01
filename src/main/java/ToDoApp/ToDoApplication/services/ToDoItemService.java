@@ -18,6 +18,10 @@ public class ToDoItemService {
         return toDoItemRepository.findAll();
     }
 
+    public Iterable<ToDoItem> getAllByOwnerId(Long ownerId) {
+        return toDoItemRepository.findByOwnerId(ownerId);
+    }
+
     public Optional<ToDoItem> getById(Long id) {
         return toDoItemRepository.findById(id);
     }
