@@ -5,7 +5,9 @@ import ToDoApp.ToDoApplication.models.User;
 import ToDoApp.ToDoApplication.services.ToDoItemService;
 import ToDoApp.ToDoApplication.services.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -20,13 +22,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ToDoFormController {
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
     private ToDoItemService toDoItemService;
 
-    @GetMapping("/user/{userid}")
-    public ModelAndView index(@PathVariable("userid") Long userid) {
+    @GetMapping("/")
+    public ModelAndView index(@AuthenticationPrincipal UserDetails user) {
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("toDoItems", toDoItemService.getAll());
         return modelAndView;
@@ -38,18 +40,15 @@ public class ToDoFormController {
     }
 
     @PostMapping("/todo")
-    public String createToDoItem(@Valid ToDoItem toDoItem, BindingResult result, Model model) {
+    public String createToDoItem(@AuthenticationPrincipal UserDetails user, @Valid ToDoItem toDoItem, BindingResult result, Model model) {
         ToDoItem item = new ToDoItem();
         item.setDescription(toDoItem.getDescription());
         item.setIsComplete(toDoItem.getIsComplete());
-
-        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
-        String username = null;
-        if (userDetails instanceof UserDetails) {
-            username =  ((UserDetails) userDetails).getUsername();
-            System.out.println("ABABAB");
-        }
-        (userService.findByUsername(username)).toDoItemSet.add(toDoItemService.save(item));
+        item.setOwnerId(
+                userService.findByUsername(user.getUsername()).getId()
+        );
+        toDoItemService.save(item);
+        System.out.println("KAVABANGA");
         return "redirect:/";
     }
 

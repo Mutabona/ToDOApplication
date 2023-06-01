@@ -1,17 +1,21 @@
 package ToDoApp.ToDoApplication.models;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class User implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,11 +24,6 @@ public class User implements Serializable {
     private String username;
 
     private String password;
-
-    @OneToMany
-    @JoinTable(name = "user_todos", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "todo"))
-    public Set<ToDoItem> toDoItemSet;
 
     @Transient
     private String confirmPassword;

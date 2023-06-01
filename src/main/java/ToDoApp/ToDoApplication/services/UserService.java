@@ -18,15 +18,10 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    /*@Autowired
-    private RoleDao roleDao;*/
-
 
     public void save(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        //Set<Role> roles = new HashSet<>();
-        //roles.add(roleDao.getOne(1L));
-        //user.setRoles(roles);
+
         userRepository.save(user);
     }
 

@@ -34,11 +34,11 @@ public class UserController {
 
         userService.save(newUser);
         securityService.autoLogin(user.getUsername(), user.getPassword());
-        return String.format("redirect:/user/%d", user.getId());
+        return String.format("redirect:/login");
     }
 
-    @PostMapping("/join")
+    /*@GetMapping("/login")
     public String join() {
-        return String.format("redirect:/user/%d", 12);
-    }
+        return String.format("redirect:/");
+    }*/
 }

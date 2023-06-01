@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SecurityService {
-    private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -43,7 +42,7 @@ public class SecurityService {
         if (authenticationToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-            logger.debug(String.format("Successfully %s auto logged in", username));
+            System.out.println(String.format("Successfully %s auto logged in", username));
         }
     }
 
