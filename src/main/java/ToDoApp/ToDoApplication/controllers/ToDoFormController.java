@@ -48,7 +48,6 @@ public class ToDoFormController {
                 userService.findByUsername(user.getUsername()).getId()
         );
         toDoItemService.save(item);
-        System.out.println("KAVABANGA");
         return "redirect:/";
     }
 

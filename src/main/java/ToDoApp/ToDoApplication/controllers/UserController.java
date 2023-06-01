@@ -28,6 +28,9 @@ public class UserController {
 
     @PostMapping("/register")
     public String reg(@Valid User user, BindingResult result, Model model) {
+        if (userService.findByUsername(user.getUsername()) != null) {
+            return "redirect:/error";
+        }
         User newUser = new User();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(user.getPassword());
@@ -36,9 +39,4 @@ public class UserController {
         securityService.autoLogin(user.getUsername(), user.getPassword());
         return String.format("redirect:/login");
     }
-
-    /*@GetMapping("/login")
-    public String join() {
-        return String.format("redirect:/");
-    }*/
 }
