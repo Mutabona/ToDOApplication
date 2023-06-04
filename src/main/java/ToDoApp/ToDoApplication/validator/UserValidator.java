@@ -28,25 +28,21 @@ public class UserValidator implements Validator {
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "Required");
 
-        if (user.getUsername().length() < 3 || user.getUsername().length() > 32) {
-            System.out.println("User " +user.getUsername() + " rejected");
+        if (user.getUsername().length() < 3 || user.getUsername().length() > 16) {
             errors.rejectValue("username", "Size.userForm.username");
         }
 
         if (userService.findByUsername(user.getUsername()) != null) {
-            System.out.println("User " +user.getUsername() + " rejected");
             errors.rejectValue("username", "Duplicate.userForm.username");
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "Required");
 
         if (user.getPassword().length() < 3 || user.getPassword().length() > 32) {
-            System.out.println("User " +user.getUsername() + " rejected");
             errors.rejectValue("password", "Size.userForm.password");
         }
 
         if (!user.getConfirmPassword().equals(user.getPassword())) {
-            System.out.println("User " +user.getUsername() + " rejected");
             errors.rejectValue("confirmPassword", "Different.userForm.password");
         }
     }
