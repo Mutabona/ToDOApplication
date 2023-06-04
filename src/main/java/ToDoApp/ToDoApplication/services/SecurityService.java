@@ -3,6 +3,7 @@ package ToDoApp.ToDoApplication.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SecurityService {
+public class SecurityService extends Neo4jProperties.Security {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -23,8 +24,12 @@ public class SecurityService {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     public String findLoggedInUsername() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
+        System.out.println("findLoggedInUsername");
         if (userDetails instanceof UserDetails) {
             return ((UserDetails) userDetails).getUsername();
         }
@@ -33,11 +38,31 @@ public class SecurityService {
     }
 
     public void autoLogin(String username, String password) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = null;
+        try {
+            userDetails = userDetailsService.loadUserByUsername(username);
+        }
+        catch (Exception e) {
+            System.out.println("User Details exception: " + e);
+        }
+        if (userDetails == null) {
+            System.out.println("User details error");
+            return;
+        }
+
+        System.out.println("autoLogin data loaded");
+
+        System.out.println("Auto login data: username: " + userDetails.getUsername() + " password: " + password);
+
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
 
-        authenticationManager.authenticate(authenticationToken);
+        try {
+            authenticationManager.authenticate(authenticationToken);
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
 
         if (authenticationToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);

@@ -8,14 +8,13 @@
 </head>
 <body>
 <div class="container">
-    <h1>Жаль, что я не знаю html</h1>
+    <h1>Todo application</h1> <h1>Logged in as <td th:text="${user.username}" style="color: green"></td></h1>
     <hr />
 
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
             <th>Actions</th>
-            <th>Id</th>
             <th>Description</th>
             <th>Is Complete</th>
             <th>Created At</th>
@@ -32,7 +31,6 @@
                         <i class="bi bi-trash-fill"></i> Delete</a>
                 </div>
             </td>
-            <td th:text="${item.id}"></td>
             <td th:text="${item.description}"></td>
             <td>
                 <span th:if="${item.isComplete} == true" th:text="Yes" />
@@ -46,6 +44,9 @@
 
     <p><a class="btn btn-outline-success" href="/create-todo">
         <i class="bi bi-plus-square-fill"></i> Create a Todo</a>
+    </p>
+    <p><a class="btn btn-outline-success" href="/logout">
+        <i class="bi bi-plus-square-fill"></i> Logout</a>
     </p>
 </div>
 <script th:src="@{/webjars/bootstrap/5.2.2/js/bootstrap.min.js}"></script>

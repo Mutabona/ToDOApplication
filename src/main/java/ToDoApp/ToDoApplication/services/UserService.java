@@ -23,6 +23,7 @@ public class UserService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
         userRepository.save(user);
+        System.out.println("User " + user.getUsername() + " with password: " + user.getConfirmPassword()+ " saved");
     }
 
     public User findByUsername(String username) {

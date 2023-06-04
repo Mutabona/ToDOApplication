@@ -22,7 +22,14 @@ public class UserDetailsService implements org.springframework.security.core.use
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
 
+        if (user.getUsername() == null) {
+            System.out.println("No user with this username");
+            return null;
+        }
+
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+
+        System.out.println("Details: username: " + user.getUsername() + " password: " + user.getPassword());
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
     }

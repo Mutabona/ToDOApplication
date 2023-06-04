@@ -32,10 +32,12 @@ public class ToDoItemService {
         }
 
         toDoItem.setUpdatedAt(Instant.now());
+        System.out.println("To do item saved");
         return toDoItemRepository.save(toDoItem);
     }
 
     public void delete(ToDoItem toDoItem) {
         toDoItemRepository.delete(toDoItem);
+        System.out.println("To do item deleted");
     }
 }

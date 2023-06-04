@@ -29,7 +29,9 @@ public class ToDoFormController {
 
     @GetMapping("/")
     public ModelAndView index(@AuthenticationPrincipal UserDetails user) {
+        System.out.println("Home page loaded");
         ModelAndView modelAndView = new ModelAndView("index");
+        modelAndView.addObject("user", user);
         modelAndView.addObject("toDoItems", toDoItemService.getAllByOwnerId(userService.findByUsername(user.getUsername()).getId()));
         return modelAndView;
     }
@@ -41,6 +43,7 @@ public class ToDoFormController {
 
     @PostMapping("/todo")
     public String createToDoItem(@AuthenticationPrincipal UserDetails user, @Valid ToDoItem toDoItem, BindingResult result, Model model) {
+        System.out.println("Add new todo item");
         ToDoItem item = new ToDoItem();
         item.setDescription(toDoItem.getDescription());
         item.setIsComplete(toDoItem.getIsComplete());
@@ -53,6 +56,7 @@ public class ToDoFormController {
 
     @GetMapping("/delete/{id}")
     public String deleteToDoItem(@PathVariable("id") Long id, Model model) {
+        System.out.println("Delete todo item");
         ToDoItem toDoItem = toDoItemService
                 .getById(id)
                 .orElseThrow(() -> new IllegalArgumentException("TodoItem id: " + id + " not found"));
@@ -61,6 +65,7 @@ public class ToDoFormController {
     }
     @GetMapping("/edit/{id}")
     public String showUpdateForm(@PathVariable("id") Long id, Model model) {
+        System.out.println("Edit todo item");
         ToDoItem toDoItem = toDoItemService
                 .getById(id)
                 .orElseThrow(() -> new IllegalArgumentException("ToDoItem id: " + id + " not found"));
@@ -70,6 +75,7 @@ public class ToDoFormController {
 
     @PostMapping("/todo/{id}")
     public String updateTodoItem(@PathVariable("id") Long id, @Valid ToDoItem toDoItem, BindingResult result, Model model) {
+        System.out.println("Todo item edited");
         ToDoItem item = toDoItemService
                 .getById(id)
                 .orElseThrow(() -> new IllegalArgumentException("ToDoItem id: " + id + " not found"));
