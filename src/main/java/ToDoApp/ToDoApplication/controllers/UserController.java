@@ -53,10 +53,10 @@ public class UserController {
             System.out.println(e);
         }
 
-        return "index";
+        return "redirect:/";
     }
 
-    @GetMapping("/login")
+    /*@GetMapping("/login")
     public String login(String error, String logout) {
         System.out.println("Get mapping login");
         if (logout != null) {
@@ -66,12 +66,11 @@ public class UserController {
             System.out.println("BY LOGIN ERROR");
         }
         return "login";
+    }*/
 
-    }
-
-    @GetMapping("/logout")
+    /*@GetMapping("/logout")
     public String logout() {
         System.out.println("Get mapping logout");
         return "logout";
-    }
+    }*/
 }
