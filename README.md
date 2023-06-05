@@ -1,4 +1,4 @@
-###### ToDoApplication
+# ToDoApplication
 Нужен maven (https://maven.apache.org/)
 
 Что бы скомпилировать приложение нужно:
